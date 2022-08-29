@@ -1,0 +1,59 @@
+version: "3.4"
+
+services:
+  hangout-frontend:
+    networks:
+      - frontend
+    container_name: frontend
+    image: kdboateng/hangout-frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./dhparam:/home/ubuntu/dhparam
+      - ./cerbot/conf:/etc/nginx/ssl
+      - ./cerbot/data:/usr/share/nginx/html/letsencrypt
+
+  certbot:
+    networks:
+      - frontend
+    image: certbot/certbot:latest
+    command: certonly --webroot --webroot-path=/usr/share/nginx/html/letsencrypt --email kdboat2@gmail.com  --agree-tos --no-eff-email -d legacybanking.us
+    volumes:
+      - ./cerbot/conf:/etc/letsencrypt
+      - ./cerbot/logs:/var/log/letsencrypt
+      - ./cerbot/data:/usr/share/nginx/html/letsencrypt
+
+  hangout-backend:
+    networks:
+      - frontend
+      - backend
+    container_name: backend
+    image: kdboateng/hangout-server
+    ports:
+      - "7000:7000"
+    environment:
+      - CHAT_PORT=7000
+      - JWT_SECRET=boot
+      - EXPIRES_IN=60000
+      - CORS_ORIGIN=*
+      - CORS_METHOD=GET,POST
+      - LOGGER=dev
+      - MAX_CAPACITY=20
+      - REDIS_CACHE_IP=redis
+      - REDIS_CACHE_PORT=6379
+      - ROOM_ID_FORMAT=hex
+      - TOKEN_LENGTH=10
+
+  redis-cache:
+    networks:
+      - backend
+    container_name: redis
+    image: kdboateng/lb-redis-service:1.1
+    ports:
+      - "6379:6379"
+
+networks:
+  frontend:
+    external: true
+  backend:
+    external: true
