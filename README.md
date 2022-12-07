@@ -10,9 +10,10 @@
 
   - React JS
   - Typescript
-  - Web RTC (Simple-Peer)
+  - Web RTC (Simple-Peer/Socket io)
 
 - Backend
+  - Websockets (Socket.io)
   - NodeJS
   - Redis Caching
 - DevOps
