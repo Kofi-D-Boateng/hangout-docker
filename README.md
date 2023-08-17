@@ -6,13 +6,13 @@
 
 ## Stack
 
-- Frontend
+- [Frontend](https://github.com/Kofi-D-Boateng/chat-frontend)
 
   - React JS
   - Typescript
   - Web RTC (Simple-Peer/Socket io)
 
-- Backend
+- [Backend](https://github.com/Kofi-D-Boateng/chat-server-ts)
   - Websockets (Socket.io)
   - NodeJS
   - Redis Caching
